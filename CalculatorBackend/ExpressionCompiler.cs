@@ -96,13 +96,13 @@ namespace CalculatorBackend
                     if (CurrentToken.Type == TokenType.Mul)
                     {
                         ReadToken();
-                        return Expression.Multiply(tExpr, S());
+                        return Expression.Multiply(tExpr, T());
                     }
                     break;
 
                 case TokenType.Mul:
                     ReadToken();
-                    return Expression.Multiply(tExpr, S());
+                    return Expression.Multiply(tExpr, T());
             }
 
             return tExpr;

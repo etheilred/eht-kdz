@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using CalculatorBackend;
 
 namespace HSEApiTraining
 {
@@ -13,12 +16,14 @@ namespace HSEApiTraining
     {
         public IEnumerable<double> CalculateBatchExpressions(IEnumerable<string> expressions)
         {
-            throw new NotImplementedException();
+            return expressions.Select(CalculateExpression);
         }
 
         public double CalculateExpression(string expression)
         {
-            return expression.Length;
+            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
+            ExpressionCompiler compiler = new ExpressionCompiler(lexer);
+            return compiler.GetExpression().Compile()();
         }
     }
 }

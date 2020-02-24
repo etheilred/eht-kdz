@@ -1,4 +1,5 @@
-﻿using HSEApiTraining.Models.Calculator;
+﻿using System;
+using HSEApiTraining.Models.Calculator;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -20,11 +21,21 @@ namespace HSEApiTraining.Controllers
         {
             //Тут нужно подключить реализованную в сервисе calculatorService логику вычисления выражений
             //В нижнем методе - аналогично
-            var result = _calculatorService.CalculateExpression(expression);
-            return new CalculatorResponse
+            try
             {
-                Value = result
-            };
+                var result = _calculatorService.CalculateExpression(expression);
+                return new CalculatorResponse
+                {
+                    Value = result
+                };
+            }
+            catch (Exception e)
+            {
+                return new CalculatorResponse
+                {
+                    Error = e.Message
+                };
+            }
         }
 
         [HttpPost]
