@@ -8,7 +8,7 @@ namespace CalculatorBackend
     /// <summary>
     /// Реализует лексический анализатор по грамматике:
     /// 
-    ///     S -> NUM S | {space}* S | [+-/*] S | ( S | ) S
+    ///     S -> NUM S | {space}* S | [+-/*%] S | ( S | ) S
     ///     NUM -> [0-9]* ((.|,)[0-9]+)?
     /// </summary>
     public class ExpressionLexer : LexerBase
@@ -42,6 +42,7 @@ namespace CalculatorBackend
                 case '-': Match(); return new Token(TokenType.Minus) { Position = CurrentPosition };
                 case '*': Match(); return new Token(TokenType.Mul) { Position = CurrentPosition };
                 case '/': Match(); return new Token(TokenType.Div) { Position = CurrentPosition };
+                case '%': Match(); return new Token(TokenType.Modulo) { Position = CurrentPosition };
                 case '(': Match(); return new Token(TokenType.ParenLeft) { Position = CurrentPosition };
                 case ')': Match(); return new Token(TokenType.ParenRight) { Position = CurrentPosition };
             }

@@ -5,6 +5,6 @@
     /// </summary>
     public enum TokenType
     {
-        Number, Plus, Minus, Div, Mul, ParenLeft, ParenRight, Eof
+        Number, Plus, Minus, Div, Mul, ParenLeft, ParenRight, Modulo, Eof
     }
 }

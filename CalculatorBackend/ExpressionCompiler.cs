@@ -85,12 +85,16 @@ namespace CalculatorBackend
             var tExpr = P();
             switch (CurrentToken.Type)
             {
+                case TokenType.Modulo:
                 case TokenType.Div:
-                    while (CurrentToken.Type == TokenType.Div)
+                    while (CurrentToken.Type == TokenType.Div || CurrentToken.Type == TokenType.Modulo)
                     {
+                        TokenType cType = CurrentToken.Type;
                         ReadToken();
                         var tExprRight = P();
-                        tExpr = Expression.Divide(tExpr, tExprRight);
+                        tExpr = cType == TokenType.Div ? 
+                            Expression.Divide(tExpr, tExprRight) :
+                            Expression.Modulo(tExpr, tExprRight);
                     }
 
                     if (CurrentToken.Type == TokenType.Mul)
