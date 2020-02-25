@@ -1,6 +1,7 @@
-﻿using System;
-using HSEApiTraining.Models.Calculator;
+﻿using HSEApiTraining.Models.Calculator;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HSEApiTraining.Controllers
@@ -41,10 +42,33 @@ namespace HSEApiTraining.Controllers
         [HttpPost]
         public CalculatorBatchResponse CalculateBatch([FromBody] CalculatorBatchRequest Request)
         {
+            IEnumerable<CalculatorResponse> responses = Request.Expressions.Select(x =>
+            {
+                try
+                {
+                    return new CalculatorResponse { Value = _calculatorService.CalculateExpression(x) };
+                }
+                catch (FormatException e)
+                {
+                    return new CalculatorResponse { Error = e.Message };
+                }
+            });
+            string error = null;
+            if (responses.Any(x => x.Error != null))
+            {
+                int i = 0;
+                foreach (var calculatorResponse in responses)
+                {
+                    ++i;
+                    if (calculatorResponse.Error != null) break;
+                }
+                error = $"Could not calculate expression at position {i}";
+            }
             //Тут организуйте подсчет и формирование ответа сами
             return new CalculatorBatchResponse
             {
-                Values = Request.Expressions.Select(x => new CalculatorResponse { Value = x.Length })
+                Values = responses,
+                Error = error
             };
         }
 
