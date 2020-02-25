@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HSEApiTraining.Models.Currency;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace HSEApiTraining.Controllers
 {
@@ -7,10 +9,32 @@ namespace HSEApiTraining.Controllers
     [ApiController]
     public class CurrencyController : Controller
     {
-        [HttpGet]
-        public IActionResult DummyMethod()
+        private readonly ICurrencyService _currencyService;
+
+        public CurrencyController(ICurrencyService currencyService)
+            => _currencyService = currencyService;
+
+        [HttpPost]
+        public CurrencyResponce GetRates(CurrencyRequest request)
         {
-            return View();
+            try
+            {
+                return new CurrencyResponce
+                {
+                    Rates = _currencyService.GetRates(request.Symbol,
+                        request.DateStart,
+                        request.DateEnd),
+                    Error = null,
+                };
+            }
+            catch (Exception e) 
+            {
+                return new CurrencyResponce
+                {
+                    Rates = null,
+                    Error = e.Message,
+                };
+            }
         }
     }
 }

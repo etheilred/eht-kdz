@@ -1,4 +1,5 @@
-﻿using CalculatorBackend;
+﻿using System;
+using CalculatorBackend;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,14 +9,26 @@ namespace HSEApiTraining
     public interface ICalculatorService
     {
         double CalculateExpression(string expression);
-        IEnumerable<double> CalculateBatchExpressions(IEnumerable<string> expressions);
+
+        IEnumerable<(double result, string errorMessage)> CalculateBatchExpressions(IEnumerable<string> expressions);
     }
 
     public class CalculatorService : ICalculatorService
     {
-        public IEnumerable<double> CalculateBatchExpressions(IEnumerable<string> expressions)
+        public IEnumerable<(double result, string errorMessage)> CalculateBatchExpressions(IEnumerable<string> expressions)
         {
-            return expressions.Select(CalculateExpression);
+            return expressions.Select(x =>
+            {
+                try
+                {
+                    var d = CalculateExpression(x);
+                    return (d, null);
+                }
+                catch (Exception ex)
+                {
+                    return (0.0, ex.Message);
+                }
+            });
         }
 
         public double CalculateExpression(string expression)

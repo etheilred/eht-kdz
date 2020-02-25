@@ -40,11 +40,10 @@ namespace CalculatorBackend
         /// <param name="type"></param>
         private void CheckToken(TokenType type)
         {
-            if (CurrentToken.Type == type) ReadToken();
+            if (CurrentToken.Type == type)
+                ReadToken();
             else
-            {
                 throw new FormatException($"Unexpected {CurrentToken.Type} at {CurrentToken.Position}");
-            }
         }
 
         /// <summary>

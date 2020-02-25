@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using HSEApiTraining.Models.Dummy;
-using System;
+﻿using HSEApiTraining.Models.Dummy;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HSEApiTraining.Controllers
 {
@@ -10,10 +9,7 @@ namespace HSEApiTraining.Controllers
     {
         private readonly IDummyService _dummyService;
 
-        public DummyController(IDummyService dummyService)
-        {
-            _dummyService = dummyService;
-        }
+        public DummyController(IDummyService dummyService) => _dummyService = dummyService;
 
         [HttpGet("generate/{number}")]
         public DummyResponse DummyGenerator(int number)

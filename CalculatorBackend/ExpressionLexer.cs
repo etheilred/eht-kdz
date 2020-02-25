@@ -13,9 +13,7 @@ namespace CalculatorBackend
     /// </summary>
     public class ExpressionLexer : LexerBase
     {
-        public ExpressionLexer(StringReader sr) : base(sr)
-        {
-        }
+        public ExpressionLexer(StringReader sr) : base(sr) { }
 
         /// <summary>
         /// Возвращает очередной токен
@@ -29,22 +27,23 @@ namespace CalculatorBackend
         /// <returns></returns>
         private Token S()
         {
+            // Пропускаем пробелы
+            while (char.IsWhiteSpace(Peek)) Match();
+
             // Если конец потока - то возвращаем EOF
             if (Eof)
-                return new Token(TokenType.Eof);
-
-            while (char.IsWhiteSpace(Peek)) Match();
+                return new Token(TokenType.Eof) { Position = CurrentPosition };
 
             // Проверяем односимвольные терминалы
             switch (Peek)
             {
-                case '+': Match(); return new Token(TokenType.Plus) { Position = CurrentPosition };
-                case '-': Match(); return new Token(TokenType.Minus) { Position = CurrentPosition };
-                case '*': Match(); return new Token(TokenType.Mul) { Position = CurrentPosition };
-                case '/': Match(); return new Token(TokenType.Div) { Position = CurrentPosition };
-                case '%': Match(); return new Token(TokenType.Modulo) { Position = CurrentPosition };
-                case '(': Match(); return new Token(TokenType.ParenLeft) { Position = CurrentPosition };
-                case ')': Match(); return new Token(TokenType.ParenRight) { Position = CurrentPosition };
+                case '+': Match(); return new Token(TokenType.Plus) { Position = CurrentPosition - 1 };
+                case '-': Match(); return new Token(TokenType.Minus) { Position = CurrentPosition - 1 };
+                case '*': Match(); return new Token(TokenType.Mul) { Position = CurrentPosition - 1 };
+                case '/': Match(); return new Token(TokenType.Div) { Position = CurrentPosition - 1 };
+                case '%': Match(); return new Token(TokenType.Modulo) { Position = CurrentPosition - 1 };
+                case '(': Match(); return new Token(TokenType.ParenLeft) { Position = CurrentPosition - 1 };
+                case ')': Match(); return new Token(TokenType.ParenRight) { Position = CurrentPosition - 1};
             }
 
             // Осталось только число
@@ -75,9 +74,10 @@ namespace CalculatorBackend
                 // Добавляем разделитель, который сейчас является актуальным разделителем в системе
                 sb.Append(
                     Convert.ToChar(
-                        Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator
-                        ));
+                        Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator));
+
                 Match();
+
                 if (!char.IsDigit(Peek))
                     throw new FormatException($"Expected to find a digit at {CurrentPosition}, got `{Peek}`");
 

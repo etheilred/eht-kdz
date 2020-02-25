@@ -24,6 +24,7 @@ namespace HSEApiTraining
             //Делайте для простоты Singleton, в других и их различиях при необходимости разберемся позже
             services.AddSingleton<ICalculatorService, CalculatorService>();
             services.AddSingleton<IDummyService, DummyService>();
+            services.AddSingleton<ICurrencyService, CurrencyService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
