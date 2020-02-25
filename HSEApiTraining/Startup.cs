@@ -23,7 +23,8 @@ namespace HSEApiTraining
             //Они могут быть 3 типов Singleton, Transient, Scoped
             //Делайте для простоты Singleton, в других и их различиях при необходимости разберемся позже
             services.AddSingleton<ICalculatorService, CalculatorService>();
-            
+            services.AddSingleton<IDummyService, DummyService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
             {

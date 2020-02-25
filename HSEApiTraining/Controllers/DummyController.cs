@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using HSEApiTraining.Models.Dummy;
 using System;
 
 namespace HSEApiTraining.Controllers
@@ -7,17 +8,23 @@ namespace HSEApiTraining.Controllers
     [ApiController]
     public class DummyController : Controller
     {
-        private readonly Random rand;
+        private readonly IDummyService _dummyService;
 
-        public DummyController()
+        public DummyController(IDummyService dummyService)
         {
-            rand = new Random();
+            _dummyService = dummyService;
         }
 
         [HttpGet("generate/{number}")]
-        public string DummyGenerator(int number)
+        public DummyResponse DummyGenerator(int number)
         {
-            return $"Random (0, {number}): {rand.Next(number)}";
+            var q = _dummyService.DummyInt(number);
+
+            return new DummyResponse
+            {
+                RandomInt = q,
+                Formatted = $"Random(0, {number}) : {q}",
+            };
         }
     }
 }

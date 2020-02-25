@@ -12,18 +12,14 @@ namespace CalculatorBackend
     /// </summary>
     public class ExpressionCompiler
     {
-        /*
-         * S -> S + T | S - T | T
-         * ***
-         * S -> S Q | T
-         * Q -> + T | - T
-         * ***
-         * S -> T S' | T
-         * S' -> Q S' | Q
-         */
-
+        /// <summary>
+        /// Входной поток токенов
+        /// </summary>
         private readonly ILexer _lexer;
 
+        /// <summary>
+        /// Содержит токен, который дожен быть обработан в данный момент
+        /// </summary>
         private Token CurrentToken { get; set; }
 
         public ExpressionCompiler(ILexer lexer)
@@ -32,8 +28,16 @@ namespace CalculatorBackend
             CurrentToken = _lexer.NextToken();
         }
 
+        /// <summary>
+        /// Считывает очередной токен
+        /// </summary>
         private void ReadToken() => CurrentToken = _lexer.NextToken();
 
+        /// <summary>
+        /// Если тип текущего токена совпадает с переданным типом, то считывает очередной токен
+        /// Иначе бросает исключение
+        /// </summary>
+        /// <param name="type"></param>
         private void CheckToken(TokenType type)
         {
             if (CurrentToken.Type == type) ReadToken();
@@ -43,6 +47,10 @@ namespace CalculatorBackend
             }
         }
 
+        /// <summary>
+        /// Возвращает дерево выражений для лямбда функции, которая вычисляет выражение
+        /// </summary>
+        /// <returns></returns>
         public Expression<Func<double>> GetExpression()
         {
             var expression = Expression.Lambda<Func<double>>(S());
@@ -52,6 +60,10 @@ namespace CalculatorBackend
             return expression;
         }
 
+        /// <summary>
+        /// Методы S, T, P соответствуют нетерминальным символам грамматики
+        /// </summary>
+        /// <returns></returns>
         private Expression S()
         {
             var tExpr = T();

@@ -72,6 +72,7 @@ namespace CalculatorBackend
 
             if (Peek == '.' || Peek == ',')
             {
+                // Добавляем разделитель, который сейчас является актуальным разделителем в системе
                 sb.Append(
                     Convert.ToChar(
                         Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator
