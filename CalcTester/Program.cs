@@ -1,4 +1,4 @@
-﻿#define Calc
+#define Calc
 
 using System;
 using System.IO;

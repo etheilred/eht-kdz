@@ -1,6 +1,8 @@
 ﻿using HSEApiTraining.Models.Calculator;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HSEApiTraining.Controllers
@@ -44,14 +46,23 @@ namespace HSEApiTraining.Controllers
 
             try
             {
-                var responses = _calculatorService.CalculateBatchExpressions(Request.Expressions);
+                var responses = _calculatorService.CalculateBatchExpressions(Request.Expressions).Select(x =>
+                    new CalculatorResponse
+                    {
+                        Value = x.result,
+                        Error = x.errorMessage,
+                    });
+                string error = null;
+
+                if ((responses.Select(x => x.Error).Where(x => x != null) is IEnumerable<string> s) && s.Count() > 0)
+                {
+                    error = $"{s.Count()} errors";
+                }
+
                 return new CalculatorBatchResponse
                 {
-                    Values = responses.Select(x => new CalculatorResponse
-                    {
-                        Value = x.result, Error = x.errorMessage,
-                    }),
-                    Error = null,
+                    Values = responses,
+                    Error = error,
                 };
             }
             catch (Exception e)
