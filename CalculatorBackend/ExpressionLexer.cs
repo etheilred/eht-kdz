@@ -9,7 +9,7 @@ namespace CalculatorBackend
     /// Реализует лексический анализатор по грамматике:
     /// 
     ///     S -> NUM S | {space}* S | [+-/*%] S | ( S | ) S
-    ///     NUM -> [0-9]* ((.|,)[0-9]+)?
+    ///     NUM -> [0-9]+ ((.|,)[0-9]+)?
     /// </summary>
     public class ExpressionLexer : LexerBase
     {

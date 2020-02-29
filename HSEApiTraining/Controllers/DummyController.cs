@@ -1,4 +1,5 @@
-﻿using HSEApiTraining.Models.Dummy;
+﻿using System;
+using HSEApiTraining.Models.Dummy;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HSEApiTraining.Controllers
@@ -15,12 +16,21 @@ namespace HSEApiTraining.Controllers
         public DummyResponse DummyGenerator(int number)
         {
             var q = _dummyService.DummyInt(number);
-
-            return new DummyResponse
+            try
             {
-                RandomInt = q,
-                Formatted = $"Random(0, {number}) : {q}",
-            };
+                return new DummyResponse
+                {
+                    RandomInt = q,
+                    Formatted = $"Random(0, {number}) : {q}",
+                };
+            }
+            catch (Exception e)
+            {
+                return new DummyResponse
+                {
+                    Error = e.Message
+                };
+            }
         }
     }
 }
