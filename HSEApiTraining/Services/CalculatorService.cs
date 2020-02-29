@@ -20,7 +20,7 @@ namespace HSEApiTraining
 
         public CalculatorService()
         {
-            string numPattern = @"-?[0-9\.,\s]+";
+            string numPattern = @"-?[^+*%/-]+";
             _exprBarrier = new Regex($"^\\s*{numPattern}\\s*[+*/%-]\\s*{numPattern}\\s*$");
         }
 
