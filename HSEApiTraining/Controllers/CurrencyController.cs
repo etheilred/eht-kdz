@@ -1,6 +1,7 @@
 ﻿using HSEApiTraining.Models.Currency;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace HSEApiTraining.Controllers
 {
@@ -15,13 +16,13 @@ namespace HSEApiTraining.Controllers
             => _currencyService = currencyService;
 
         [HttpPost]
-        public CurrencyResponce GetRates(CurrencyRequest request)
+        public async Task<CurrencyResponce> GetRates(CurrencyRequest request)
         {
             try
             {
                 return new CurrencyResponce
                 {
-                    Rates = _currencyService.GetRates(request.Symbol,
+                    Rates = await _currencyService.GetRates(request.Symbol,
                         request.DateStart,
                         request.DateEnd),
                     Error = null,

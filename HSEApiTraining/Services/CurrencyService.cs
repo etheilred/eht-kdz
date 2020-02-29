@@ -9,7 +9,7 @@ namespace HSEApiTraining
 {
     public interface ICurrencyService
     {
-        IEnumerable<double> GetRates(string currency, DateTime? start, DateTime? end);
+        Task<IEnumerable<double>> GetRates(string currency, DateTime? start, DateTime? end);
     }
 
     public class CurrencyService : ICurrencyService
@@ -17,8 +17,8 @@ namespace HSEApiTraining
         private static readonly HttpClient Client = new HttpClient();
         private static readonly Regex CurrencyRegex = new Regex(@"^[A-Z]{3}$");
 
-        public IEnumerable<double> GetRates(string currency, DateTime? start, DateTime? end) 
-            => GetRatesAsync(currency, start, end).Result;
+        public async Task<IEnumerable<double>> GetRates(string currency, DateTime? start, DateTime? end) 
+            => await GetRatesAsync(currency, start, end);
 
         private async Task<IEnumerable<double>> GetRatesAsync(string currency, DateTime? start, DateTime? end)
         {
