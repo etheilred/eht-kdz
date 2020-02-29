@@ -28,20 +28,20 @@ namespace HSEApiTraining
             HttpResponseMessage msg = new HttpResponseMessage();
 
             if (start == null)
-                msg = await Client.GetAsync($"https://api.ratesapi.io/api/latest?base=RUB&symbols={currency}");
+                msg = await Client.GetAsync($"https://api.ratesapi.io/api/latest?base={currency}&symbols=RUB");
             else if (end == null)
                 msg = await Client.GetAsync(
-                    $"https://api.ratesapi.io/api/{start.Value.Year}-{start.Value.Month}-{start.Value.Day}?base=RUB&symbols={currency}");
+                    $"https://api.ratesapi.io/api/{start.Value.Year}-{start.Value.Month}-{start.Value.Day}?base={currency}&symbols=RUB");
             else
             {
                 List<double> res = new List<double>();
-                for (DateTime t = start.Value; t <= end.Value; t = t.AddDays(1))
+                for (DateTime t = start.Value; t < end.Value; t = t.AddDays(1))
                 {
-                    msg = await Client.GetAsync($"https://api.ratesapi.io/api/{t.Year}-{t.Month}-{t.Day}?base=RUB&symbols={currency}");
+                    msg = await Client.GetAsync($"https://api.ratesapi.io/api/{t.Year}-{t.Month}-{t.Day}?base={currency}&symbols=RUB");
                     msg.EnsureSuccessStatusCode();
                     // TODO: Check msg to contain `rates` key
                     // TODO: Check msg["rates"] (whatever) to contain `currency` key
-                    res.Add(double.Parse(JObject.Parse(msg.Content.ReadAsStringAsync().Result)["rates"][currency].ToString()));
+                    res.Add(double.Parse(JObject.Parse(msg.Content.ReadAsStringAsync().Result)["rates"]["RUB"].ToString()));
                 }
                 return res;
             }
@@ -55,7 +55,7 @@ namespace HSEApiTraining
             // TODO: Check obj["rates"] to contain `currency` key
 
 
-            return new List<double> { double.Parse(obj["rates"][currency].ToString()) };
+            return new List<double> { double.Parse(obj["rates"]["RUB"].ToString()) };
         }
     }
 }
